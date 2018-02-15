@@ -65,7 +65,7 @@ namespace SaveConverter
 
             foreach (var file in Directory.GetFiles(scenesPath))
             {
-                slot.m_Dict[Path.GetFileName(file)] = ReadJToken(file);
+                slot.m_Dict[Path.GetFileNameWithoutExtension(file)] = ReadJToken(file);
             }
 
             var resultJson = JsonConvert.SerializeObject(slot, Formatting.None);
