@@ -108,22 +108,21 @@ namespace SaveConverter
 
         public static void RemoveDefault(JToken token, bool removeNull, bool removeFalse, bool removeZero)
         {
-            if (token is JObject)
+            
+            if (token is JObject jObject)
             {
-                ((JObject)token).Properties().ToList().ForEach(item => RemoveDefault(item, removeNull, removeFalse, removeZero));
+                jObject.Properties().ToList().ForEach(item => RemoveDefault(item, removeNull, removeFalse, removeZero));
             }
-            else if (token is JArray)
+            else if (token is JArray jArr)
             {
-                var jArr = (JArray)token;
                 jArr.ToList().ForEach(item => RemoveDefault(item, removeNull, removeFalse, removeZero));
             }
-            else if (token is JValue)
+            else if (token is JValue value)
             {
                 if (token.Parent.Type != JTokenType.Property)
                     return;
 
-                var value = (JValue)token;
-                if (value.Type == JTokenType.Null && removeNull)
+                if ((value.Type == JTokenType.Null || value.Value == null) && removeNull)
                     token.Parent.Remove();
                 else if (removeZero && (value.Type == JTokenType.Float || token.Type == JTokenType.Integer) && value.Value<double>() == 0)
                     token.Parent.Remove();
